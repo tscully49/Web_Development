@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Guitars with Navigation</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+	<style>
+	  @media (min-width: 768px) {
+            .container {
+                max-width: 730px;
+            }
+        }
+        .header {
+            margin-top: 30px;
+            border-bottom: 1px solid #EEE;
+        }
+        .header h2 {
+            margin-top: 0;
+            line-height: 40px;
+        }
+        #stage {
+            padding: 15px;
+        }
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<script type='text/javascript' src="history.js/scripts/bundled/html4+html5/jquery.history.js"></script>
+	<script>
+		function stageContent(content) {
+            $("#stage").html(content);
+        }
+        function evaluatePath(path) {
+            // Clean up the endpoint
+            var request = path.split("/").pop();
+            
+            // Request the content
+            if (request == "acoustic") {
+                $.get("acoustic.html", stageContent);
+            }
+            else if (request == "electric") {
+                $.get("electric.html", stageContent);
+            }
+            else {
+                $.get("home.html", stageContent);
+            }
+        }
+        $(function(){
+            // Evaluate path to start
+            evaluatePath(location.pathname);
+            
+            // When a link is clicked...
+            $("nav[role=navigation] a").click(function(e) {
+                // Don't follow its href
+                e.preventDefault();
+                
+                // Instead remember its href
+                var request = $(this).attr("href");
+                
+                var currTitle = request.split("/").pop();
+                if (currTitle == "") currTitle = "Guitars with Navigation";
+                
+                var stateObj = { oldTitle:  currTitle, request: request };
+            
+                // And add it to the browser's history
+                console.log(stateObj.oldTitle);
+                console.log(request);
+                
+                History.pushState(stateObj, currTitle, request);
+                evaluatePath(request);
+            });
+
+			History.Adapter.bind(window,'statechange',function() {
+				var selectedButton = "./"+History.getState().title;
+				if (History.getState().title == "Guitars with Navigation") selectedButton = "./";
+                $("a[href='"+selectedButton+"']").parent().addClass("active");
+                $("a[href='"+selectedButton+"']").parent().siblings().removeClass("active").find("a").blur();
+                evaluatePath(selectedButton);
+			});
+            
+            // If the back button is pressed...
+            /*$(window).on("popstate", function(event) {
+	          	console.log("THIS WORKED");
+                $(document).prop('title', event.state.oldTitle);
+                if (event.state.request == "./") {
+                	$(document).find("a[href='./']").parent().addClass("active");
+                	$(document).prop('title', 'Guitars with Navigation');
+                }
+                else { 
+                	$(document).find("a[href='"+event.state.request+"']").parent().addClass("active");
+                }*/
+                /*$(document).find("a[href='"+event.state.request+"']").parent().siblings().removeClass("active");
+                evaluatePath(location.pathname);
+                $(document).find("a[href='"+event.state.request+"']").parent().siblings().find('a').blur();
+            });*/        
+        });   
+	</script>
+</head>
+<body>
+	<div class="container">
+            
+        <!-- HEADER -->
+        <div class="header clearfix">
+            <nav role="navigation">
+                <ul class="nav nav-pills pull-right">
+                    <li class = "active"><a href="./">Home</a></li>
+                    <li><a href="./acoustic">Acoustic</a></li>
+                    <li><a href="./electric">Electric</a></li>
+                </ul>
+            </nav>
+            <h2 class="text-muted">The World of Guitars</h2>
+        </div>
+        
+        <!-- STAGE -->
+        <div id="stage"></div>
+        
+    </div>
+</body>
+</html>

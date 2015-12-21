@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Responsive Web Components</title>
+        <style>
+            body {
+                margin: 0;
+            }
+            .navbar {
+                height: 50px;
+                font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+                background-image: linear-gradient(#54ACD8, #3E6DA9);
+                border-bottom: 1px solid #999;
+                box-shadow: 0 0 5px #AAA;
+            }
+            .navbar > h1 {
+                float: left;
+                margin: 0;
+                padding: 3px 10px;
+                color: #EEE;
+            }
+            .navbar > ul {
+                float: right;
+                list-style: none;
+                padding-left: 0;
+                margin: 16px 0;
+            }
+            .navbar > ul > li {
+                display: inline-block;
+                margin: 0 20px;
+            }
+            .navbar > ul > li > a {
+                text-decoration: none;
+                color: #EEE;
+                padding: 0;
+            }
+            .group:after {
+              content: "";
+              display: table;
+              clear: both;
+            }
+            @media (max-width: 540px) {
+                .navbar > ul {
+                    position: fixed;
+                    bottom: 0;
+                    background-image: linear-gradient(#54ACD8, #3E6DA9);
+                    font-family: arial;
+                    width: 100%;
+                    margin-bottom: 0;
+                    text-align: center;
+                }
+                .navbar > ul > li {
+                    margin: 0 auto;
+                    text-align: center;
+                    display: inline-block;
+                    width: 30%;
+                }
+                .navbar > ul > li > a {
+                    font-size: 1.5em;
+                }
+                .outside-buttons {
+                    border-left: solid white 1px;
+                    border-right: solid white 1px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="navbar group">
+            <h1>Responsive App</h1>
+            <ul>
+                <li class="outside-buttons"><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li class="outside-buttons"><a href="#">Contact</a></li>
+            </ul>
+        </div>
+    </body>
+</html>
